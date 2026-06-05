@@ -4,8 +4,10 @@ import css from "./SignInPage.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, LoginRequest } from "@/lib/api/clientApi";
-import { ApiError } from "@/app/api/api";
 import { useAuthStore } from "@/lib/store/authStore";
+import { AxiosError } from "axios";
+
+type ApiError = AxiosError<{ error?: string }>;
 
 const SignIn = () => {
   const router = useRouter();
