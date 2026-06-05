@@ -54,12 +54,12 @@ export async function deleteNote(noteId: string): Promise<Note> {
   return response.data;
 }
 
-export async function register(data: RegisterRequest) {
+export async function register(data: RegisterRequest): Promise<User> {
   const response = await api.post<User>("/auth/register", data);
   return response.data;
 }
 
-export async function login(data: LoginRequest) {
+export async function login(data: LoginRequest): Promise<User> {
   const response = await api.post<User>("/auth/login", data);
   return response.data;
 }
@@ -69,17 +69,17 @@ export async function logout(): Promise<void> {
   return response.data;
 }
 
-export async function checkSession() {
+export async function checkSession(): Promise<boolean> {
   const response = await api.get<CheckSessionRequest>("/auth/session");
   return response.data.success;
 }
 
-export async function getMe() {
+export async function getMe(): Promise<User> {
   const { data } = await api.get<User>("/users/me");
   return data;
 }
 
-export async function updateMe(data: Record<string, unknown>) {
-  const response = await api.patch("/users/me", data);
+export async function updateMe(data: { username: string }): Promise<User> {
+  const response = await api.patch<User>("/users/me", data);
   return response.data;
 }
