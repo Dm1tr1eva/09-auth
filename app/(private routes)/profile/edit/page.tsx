@@ -4,23 +4,26 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { getMe, updateMe } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
 import css from "./EditProfilePage.module.css";
 
 const EditProfile = () => {
   const router = useRouter();
-  const [user, setUser] = useState({ username: "", email: "", avatar: "" });
+  const setUser = useAuthStore((state) => state.setUser);
+  const [user, setLocalUser] = useState({ username: "", email: "", avatar: "" });
   const [username, setUsername] = useState("");
 
   useEffect(() => {
     getMe().then((data) => {
-      setUser(data);
+      setLocalUser(data);
       setUsername(data.username);
     });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await updateMe({ username });
+    const updatedUser = await updateMe({ username });
+    setUser(updatedUser);
     router.push("/profile");
   };
 
