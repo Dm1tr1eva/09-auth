@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { isValidTag } from "@/lib/api";
+import { isValidTag } from "@/lib/api/api";
 import { notFound } from "next/navigation";
 import FilterNotesClient from "./Notes.client";
 import {

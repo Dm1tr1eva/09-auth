@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AVAILABLE_TAGS } from "@/lib/api";
+import { AVAILABLE_TAGS } from "@/lib/api/api";
 import css from "./SidebarNotes.module.css";
 
 const NotesSidebar = () => {

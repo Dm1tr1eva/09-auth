@@ -1,6 +1,6 @@
 import api from "./api";
 import type { Note } from "@/types/note";
-import type { CreateNoteRequest, FetchNotesResponse } from "../api";
+import type { CreateNoteRequest, FetchNotesResponse } from "./api";
 import type { User } from "@/types/user";
 
 interface fetchNotesParams {

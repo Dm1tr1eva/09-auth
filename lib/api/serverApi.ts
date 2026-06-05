@@ -1,6 +1,6 @@
 
 import type { Note } from "@/types/note";
-import type { FetchNotesResponse } from "../api";
+import type { FetchNotesResponse } from "./api";
 import api from "./api";
 import { cookies } from "next/headers";
 import { User } from "@/types/user";

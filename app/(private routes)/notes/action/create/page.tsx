@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AVAILABLE_TAGS, type Tag } from "@/lib/api";
+import { AVAILABLE_TAGS, type Tag } from "@/lib/api/api";
 import css from "./CreateNote.module.css";
 import NoteForm from "@/components/NoteForm/NoteForm";
 
