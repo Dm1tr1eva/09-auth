@@ -1,4 +1,5 @@
-import { fetchNoteById } from "@/lib/api";
+import { cookies } from "next/headers";
+import { fetchNoteById } from "@/lib/api/serverApi";
 import {
   QueryClient,
   HydrationBoundary,
@@ -12,11 +13,12 @@ type Props = {
 
 const NotePreviewPage = async ({ params }: Props) => {
   const { id } = await params;
+  const cookieStore = await cookies();
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
-    queryFn: () => fetchNoteById(id),
+    queryFn: () => fetchNoteById(id, cookieStore.toString()),
   });
 
   return (

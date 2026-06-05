@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import { fetchNoteById } from "@/lib/api";
+import { cookies } from "next/headers";
+import { fetchNoteById } from "@/lib/api/serverApi";
 import {
   QueryClient,
   HydrationBoundary,
@@ -11,11 +12,10 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-// app/notes/[id]/page.tsx
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
-  const note = await fetchNoteById(id);
+  const { id } = await params;
+  const cookieStore = await cookies();
+  const note = await fetchNoteById(id, cookieStore.toString());
   return {
     title: `Note: ${note.title}`,
     description: note.content.slice(0, 30),
@@ -37,14 +37,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-
 const NoteDetails = async ({ params }: Props) => {
   const { id } = await params;
+  const cookieStore = await cookies();
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
-    queryFn: () => fetchNoteById(id),
+    queryFn: () => fetchNoteById(id, cookieStore.toString()),
   });
 
   return (

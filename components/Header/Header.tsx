@@ -1,7 +1,13 @@
+"use client";
+
 import css from "./Header.module.css";
 import Link from "next/link";
+import AuthNavigation from "../AuthNavigation/AuthNavigation";
+import { useAuthStore } from "@/lib/store/authStore";
 
 const Header = () => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return (
     <header className={css.header}>
       <Link href="/" aria-label="Home">
@@ -12,9 +18,12 @@ const Header = () => {
           <li>
             <Link href="/">Home</Link>
           </li>
-          <li>
-            <Link href="/notes/filter/all">Notes</Link>
-          </li>
+          {isAuthenticated && (
+            <li>
+              <Link href="/notes/filter/all">Notes</Link>
+            </li>
+          )}
+          <AuthNavigation />
         </ul>
       </nav>
     </header>

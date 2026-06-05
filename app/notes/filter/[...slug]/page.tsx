@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 import { isValidTag } from "@/lib/api";
 import { notFound } from "next/navigation";
 import FilterNotesClient from "./Notes.client";
@@ -7,7 +8,7 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import { fetchNotes } from "@/lib/api";
+import { fetchNotes } from "@/lib/api/serverApi";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -44,16 +45,20 @@ export default async function NotesByFilterPage({ params }: Props) {
   }
 
   const tag = slug[0] === "all" ? undefined : slug[0];
+  const cookieStore = await cookies();
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["filterNotes", tag, 1],
     queryFn: () =>
-      fetchNotes({
-        page: 1,
-        perPage: 12,
-        tag: tag,
-      }),
+      fetchNotes(
+        {
+          page: 1,
+          perPage: 12,
+          tag: tag,
+        },
+        cookieStore.toString(),
+      ),
   });
 
   return (
