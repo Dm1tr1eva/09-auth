@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NoteHub
+
+Note-taking application with authentication built on Next.js.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (Turbopack)
+- **Language:** TypeScript
+- **State Management:** Zustand
+- **API Client:** Axios
+- **Server State:** TanStack Query
+- **Auth:** Cookie-based (BFF proxy pattern)
+
+## Project Structure
+
+```
+app/
+├── (auth routes)/        # Public routes (sign-in, sign-up)
+├── (private routes)/     # Protected routes (profile, notes)
+│   ├── notes/
+│   └── profile/
+├── @modal/               # Parallel route for note modal preview
+├── api/                  # BFF API routes (proxy to external API)
+│   ├── auth/             # login, register, logout, session
+│   ├── notes/
+│   └── users/
+components/               # Reusable UI components
+lib/
+├── api/                  # Axios instances & API functions
+│   ├── api.ts            # Axios instance with credentials
+│   ├── clientApi.ts      # Client-side API functions
+│   └── serverApi.ts      # Server-side API functions (with cookie forwarding)
+├── store/                # Zustand stores
+│   ├── authStore.ts      # Auth state (user, isAuthenticated)
+│   └── noteStore.ts      # Note draft state
+proxy.ts                  # Route protection middleware
+types/                    # TypeScript type definitions
+```
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_API_URL` | Base URL for the app (used by BFF axios instance) |
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## API
 
-To learn more about Next.js, take a look at the following resources:
+The app uses a BFF (Backend For Frontend) pattern. Client requests go to Next.js API routes (`/api/*`), which proxy requests to `https://notehub-api.goit.study` with authentication cookies.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Auth Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `POST /api/auth/register` — Register a new user
+- `POST /api/auth/login` — Log in
+- `POST /api/auth/logout` — Log out
+- `GET /api/auth/session` — Check session validity
 
-## Deploy on Vercel
+### User Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `GET /api/users/me` — Get current user profile
+- `PATCH /api/users/me` — Update profile (username)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Notes Endpoints
+
+- `GET /api/notes` — List notes (pagination, search, tag filter)
+- `GET /api/notes/:id` — Get note by ID
+- `POST /api/notes` — Create a note
+- `DELETE /api/notes/:id` — Delete a note
