@@ -18,9 +18,17 @@ app/
 ├── (auth routes)/        # Public routes (sign-in, sign-up)
 ├── (private routes)/     # Protected routes (profile, notes)
 │   ├── notes/
+│   │   ├── filter/       # Filter layout with parallel sidebar
+│   │   │   ├── @sidebar/ # Sidebar parallel route
+│   │   │   └── [...slug]/ # Dynamic filter page (tag/search)
+│   │   ├── action/
+│   │   │   └── create/   # Create note page
+│   │   └── [id]/         # Note detail page
 │   └── profile/
+│       └── edit/         # Edit profile page
 ├── @modal/               # Parallel route for note modal preview
 ├── api/                  # BFF API routes (proxy to external API)
+│   ├── _utils/           # Shared API utilities
 │   ├── auth/             # login, register, logout, session
 │   ├── notes/
 │   └── users/
@@ -80,4 +88,5 @@ The app uses a BFF (Backend For Frontend) pattern. Client requests go to Next.js
 - `GET /api/notes` — List notes (pagination, search, tag filter)
 - `GET /api/notes/:id` — Get note by ID
 - `POST /api/notes` — Create a note
+- `PATCH /api/notes/:id` — Update a note
 - `DELETE /api/notes/:id` — Delete a note
